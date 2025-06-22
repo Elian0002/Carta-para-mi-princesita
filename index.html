@@ -2,20 +2,140 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Carta para mi princesita chikita 💖</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Carta para mi princesita 💖</title>
+  <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Marck Script', cursive;
+      background-color: #ffeaf4;
+      text-align: center;
+      padding: 2rem;
+      margin: 0;
+    }
+
+    h1 {
+      color: #d63384;
+      margin-bottom: 1rem;
+    }
+
+    .carta-contenedor {
+      position: relative;
+      max-width: 360px;
+      margin: 0 auto;
+    }
+
+    .sobre {
+      position: relative;
+      width: 320px;
+      height: 200px;
+      margin: auto;
+      background: linear-gradient(135deg, #ffbad5, #ff88b8);
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(214, 51, 132, 0.4);
+      transform-origin: bottom;
+      transition: transform 1s ease;
+    }
+
+    .solapa {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 160px solid transparent;
+      border-right: 160px solid transparent;
+      border-bottom: 120px solid #ff5c91;
+      border-radius: 0 0 40px 40px;
+      z-index: 3;
+      transform-origin: bottom;
+      transition: transform 1s ease;
+    }
+
+    .papel {
+      position: absolute;
+      top: 40px;
+      left: 20px;
+      width: 280px;
+      height: 320px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+      padding: 1.5rem;
+      transform: scale(0.8) translateY(100px);
+      opacity: 0;
+      transition: all 0.7s ease;
+      z-index: 2;
+      overflow-y: auto;
+    }
+
+    .sobre.abierto {
+      transform: rotateX(30deg);
+    }
+
+    .sobre.abierto .solapa {
+      transform: rotateX(-150deg);
+    }
+
+    .sobre.abierto .papel {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+
+    .contenido {
+      text-align: left;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .corazon {
+      font-size: 3rem;
+      margin-top: 30px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .corazones-flotantes {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 200px;
+      height: 300px;
+      transform: translateX(-50%);
+      pointer-events: none;
+      overflow: visible;
+      z-index: 4;
+    }
+
+    .corazon-flotante {
+      position: absolute;
+      bottom: 0;
+      font-size: 1.5rem;
+      color: #ff4d6d;
+      opacity: 0.85;
+      animation: subir 4s ease-out forwards;
+    }
+
+    @keyframes subir {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-300px) scale(1.4);
+        opacity: 0;
+      }
+    }
+  </style>
 </head>
 <body>
+
   <h1>¡Te amo mi princesita chikita! ❤️</h1>
 
   <div class="carta-contenedor">
     <div class="sobre" id="sobre">
       <div class="solapa"></div>
-      <div class="papel" id="papel">
+      <div class="papel">
         <div class="contenido">
           <strong>Querida Mamá</strong>
           <p>
@@ -27,7 +147,7 @@
             Tu amor es el motor silencioso que impulsa mi vida. Eres lo que me impulsa día a día a seguir luchando y mejorando. Nada en este mundo se compara con cómo me hace sentir estar contigo y saber que me amas.<br><br>
             Hoy y siempre, te celebro y te agradezco por todo lo que hemos logrado juntos. Sé que ha sido muy difícil para ambos, pero al final del día eres todo lo que necesito y lo que me hace feliz, mi princesita hermosa.<br><br>
             Gracias por hacer de mi existencia una versión mejorada, sin errores (bueno, quizá con algunos, pero todos adorables).<br><br>
-            <strong>Mi amor, te quería decir que tú eres mi <em>lugar seguro</em>.</strong><br>
+            <strong>Mi amor, tú eres mi <em>lugar seguro</em>.</strong><br>
             Con mucho <strong>código</strong> (y <strong>amor</strong>),<br>
             Tu noviecito chiquito.<br><br>
             <span style="font-size: 0.9em; color: grey;">
@@ -39,14 +159,43 @@
       </div>
     </div>
 
-    <div class="corazones-flotantes"></div>
+    <div class="corazones-flotantes" id="corazones"></div>
 
-    <div class="corazon" id="abrir-btn" title="Abrir carta">💌</div>
+    <div class="corazon" id="abrir-btn">💌</div>
   </div>
 
-  <script src="script_v3.js"></script>
+  <script>
+    const sobre = document.getElementById("sobre");
+    const boton = document.getElementById("abrir-btn");
+    const corazones = document.getElementById("corazones");
+
+    let abierto = false;
+    let corazonIntervalo;
+
+    boton.addEventListener("click", () => {
+      sobre.classList.toggle("abierto");
+      abierto = !abierto;
+
+      if (abierto) {
+        corazonIntervalo = setInterval(crearCorazon, 400);
+      } else {
+        clearInterval(corazonIntervalo);
+      }
+    });
+
+    function crearCorazon() {
+      const corazon = document.createElement("div");
+      corazon.classList.add("corazon-flotante");
+      corazon.textContent = "❤️";
+      corazon.style.left = Math.random() * 180 + "px";
+      corazones.appendChild(corazon);
+      corazon.addEventListener("animationend", () => corazon.remove());
+    }
+  </script>
+
 </body>
 </html>
+
 
 
 
