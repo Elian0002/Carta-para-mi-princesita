@@ -1,92 +1,61 @@
 body {
+  background-color: #ffe6f0;
   font-family: 'Marck Script', cursive;
-  background: #fff0f5;
-  color: #333;
   text-align: center;
-  margin: 0;
-  padding: 20px;
 }
 
 h1 {
-  margin-top: 20px;
-  font-size: 2.5em;
-  color: #d63384;
+  color: #e91e63;
+  margin-top: 30px;
+  font-size: 2em;
 }
 
 .contenedor {
   display: flex;
   justify-content: center;
-  margin-top: 40px;
+  align-items: center;
+  height: 80vh;
 }
 
 .envoltura-sobre {
-  position: relative;
-  width: 300px;
-  height: 200px;
   perspective: 1000px;
-  cursor: pointer;
+  transition: transform 1s ease;
+  display: inline-block;
+}
+
+.envoltura-sobre.abierto {
+  transform: rotateX(180deg);
 }
 
 .sobre {
-  width: 100%;
-  height: 100%;
-  background: #ffcad4;
-  border: 2px solid #ff8fa3;
+  background-color: pink;
+  width: 300px;
+  height: 200px;
   position: relative;
-  transition: transform 1s;
-  transform-style: preserve-3d;
-}
-
-.envoltura-sobre.abierto .sobre {
-  transform: rotateX(-180deg);
+  overflow: hidden;
+  border: 2px solid #e91e63;
+  border-radius: 10px;
 }
 
 .carta {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: white;
   padding: 20px;
-  box-sizing: border-box;
-  transform: rotateX(180deg);
-  backface-visibility: hidden;
-  overflow-y: auto;
-  border-radius: 8px;
-}
-
-.contenido {
   text-align: left;
-  max-height: 100%;
+  height: 100%;
   overflow-y: auto;
 }
 
 .corazon {
-  position: absolute;
-  bottom: -25px;
-  left: 50%;
-  transform: translateX(-50%);
+  margin-top: 10px;
   font-size: 2em;
-  color: red;
+  cursor: pointer;
+  animation: latir 1.5s infinite;
 }
 
-.solapa-derecha,
-.solapa-izquierda {
-  position: absolute;
-  width: 50%;
-  height: 100%;
-  background: #ffb3c1;
-  top: 0;
-  z-index: 2;
+@keyframes latir {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
 }
 
-.solapa-derecha {
-  right: 0;
-  clip-path: polygon(100% 0, 0% 100%, 100% 100%);
-}
-
-.solapa-izquierda {
   left: 0;
   clip-path: polygon(0 0, 100% 100%, 0 100%);
 }
