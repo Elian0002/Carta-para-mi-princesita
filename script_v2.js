@@ -1,5 +1,4 @@
 const boton = document.getElementById("abrir-btn");
-const papel = document.getElementById("papel");
 const sobre = document.getElementById("sobre");
 const contenedorCorazones = document.querySelector('.corazones-flotantes');
 
@@ -8,20 +7,21 @@ let intervaloCorazones;
 
 boton.addEventListener("click", () => {
   if (!abierto) {
-    papel.style.transform = "translateY(0)";
-    sobre.style.transform = "rotateX(10deg)";
-    abierto = true;
+    sobre.classList.add("abierto");
+    sobre.classList.remove("cerrado");
 
     // Iniciar creación de corazones
     intervaloCorazones = setInterval(crearCorazon, 400);
 
+    abierto = true;
   } else {
-    papel.style.transform = "translateY(200px)";
-    sobre.style.transform = "rotateX(0)";
-    abierto = false;
+    sobre.classList.remove("abierto");
+    sobre.classList.add("cerrado");
 
     // Detener creación de corazones
     clearInterval(intervaloCorazones);
+
+    abierto = false;
   }
 });
 
@@ -44,6 +44,8 @@ function crearCorazon() {
     corazon.remove();
   });
 }
+
+
 
 
 
